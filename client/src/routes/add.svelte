@@ -1,8 +1,8 @@
 <script>
-	let _name = 'anılar';
-	let _author = 'seval';
-	let _publishedIn = '2021';
-	let _lang = 'tr';
+	let _name = '';
+	let _author = '';
+	let _publishedIn = '';
+	let _lang = '';
 
 	let url = 'http://localhost:21285/inventory';
 	async function postBook() {
@@ -23,6 +23,9 @@
 
 		if(result.isSuccess){
 			window.location.href="/"
+		}
+		else{
+			alert(result.errorMessage)
 		}
 	}
 </script>

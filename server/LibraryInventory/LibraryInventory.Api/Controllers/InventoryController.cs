@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using LibraryInventory.Api.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace LibraryInventory.Api.Controllers
@@ -10,48 +14,59 @@ namespace LibraryInventory.Api.Controllers
     public class InventoryController : ControllerBase
     {
         private readonly ILogger<InventoryController> _logger;
+        private readonly SqlConnection sqlConnection;
 
-        public InventoryController(ILogger<InventoryController> logger)
+        public InventoryController(ILogger<InventoryController> logger,IConfiguration configuration)
         {
             _logger = logger;
+            sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = configuration.GetConnectionString("MyDefault");
         }
 
         [HttpGet]
         public IEnumerable<Book> Get()
         {
-            _logger.Log(LogLevel.Information, "get started");
-            return books;
+            var booksFromDB = sqlConnection.Query<Book>("SELECT * FROM Book");
+            return booksFromDB;
         }
 
         [HttpGet("​{id}")]
         public Book GetSingle(int id)
         {
-            var book = books.FirstOrDefault(x => x.Id == id);
+            var book = sqlConnection.Query<Book>("SELECT * FROM Book WHERE Id = @Id", new { Id = id }).FirstOrDefault();
             return book;
         }
 
         [HttpPost]
-        public GeneralResponse Add(Book book)
+        public InventoryOperationResponse Add(Book book)
         {
+            if (books.Count > 10)
+            {
+                return new InventoryOperationResponse
+                {
+                    ErrorMessage = "Limit exceed",
+                    IsSuccess = false
+                };
+            }
             book.Id = books.Max(x => x.Id) + 1;
             books.Add(book);
-            return new GeneralResponse { IsSuccess = true };
+            return new InventoryOperationResponse { IsSuccess = true };
         }
 
-        [HttpPut()]
-        public GeneralResponse Update([FromQuery] int id, [FromBody] Book book)
+        [HttpPut]
+        public InventoryOperationResponse Update([FromQuery] int id, [FromBody] Book book)
         {
             Remove(id);
             book.Id = id;
             books.Add(book);
-            return new GeneralResponse { IsSuccess = true };
+            return new InventoryOperationResponse { IsSuccess = true };
         }
 
-        [HttpDelete()]
-        public GeneralResponse Remove(int id)
+        [HttpDelete]
+        public InventoryOperationResponse Remove(int id)
         {
             books.RemoveAll(x => x.Id == id);
-            return new GeneralResponse { IsSuccess = true };
+            return new InventoryOperationResponse { IsSuccess = true };
         }
 
         static List<Book> books = new List<Book>
