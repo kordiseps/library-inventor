@@ -27,6 +27,9 @@
 		const result = await response.json();
 		if (result.isSuccess) {
 			listPromise = fetchBooks();
+		}		
+		else{
+			alert(result.errorMessage)
 		}
 	}
 	

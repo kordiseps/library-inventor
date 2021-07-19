@@ -1,4 +1,4 @@
-﻿namespace LibraryInventory.Api.Controllers
+﻿namespace LibraryInventory.Api.Models
 {
     public class Book
     {

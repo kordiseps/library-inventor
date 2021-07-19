@@ -27,6 +27,9 @@
 
 		if (result.isSuccess) {
 			window.location.href = '/';
+		}		
+		else{
+			alert(result.errorMessage)
 		}
 	}
 	async function fetchBook() {
