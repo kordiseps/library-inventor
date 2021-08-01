@@ -1,6 +1,6 @@
 ﻿namespace LibraryInventory.Api.Models
 {
-    public class InventoryOperationResponse
+    public class OperationResponse
     {
         public bool IsSuccess { get; set; }
         public string ErrorMessage { get; set; }

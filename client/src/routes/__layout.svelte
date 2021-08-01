@@ -1,17 +1,37 @@
 <script>
 	import '../app.css';
+	import { variables } from '../variables';
 </script>
 
-
+<header>
+	<a href={variables.frontendHome}>Home</a>
+	<br />
+	<a href={variables.frontendBookList}>books</a>
+	<br />
+	<a href={variables.frontendAuthorList}>auhtors</a>
+</header>
 <main>
 	<slot />
 </main>
 
 <footer>
-	<p>visit <a target="blank" href="https://github.com/kordiseps/library-inventory">github.com/kordiseps/library-inventory</a> to see source code</p>
+	<p>
+		visit <a target="blank" href="https://github.com/kordiseps/library-inventory"
+			>github.com/kordiseps/library-inventory</a
+		> to see source code 
+	</p>
 </footer>
 
 <style>
+	header {
+		display: flex;
+		justify-content: space-around;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		width: 50%;
+		margin: auto;
+		background-color: var(--tertiary-color);
+	}
 	main {
 		flex: 1;
 		display: flex;

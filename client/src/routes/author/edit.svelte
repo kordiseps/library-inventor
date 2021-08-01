@@ -1,23 +1,19 @@
 <script>
 	import { onMount } from 'svelte';
 	let _name;
-	let _author;
-	let _publishedIn;
-	let _lang;
+	let _country;
 
-	let bookId = 0;
-	let url = 'http://localhost:21285/inventory';
+	let authorId = 0;
+	import { variables } from "../../variables"
+	let url = variables.backendAuhtorUrl;
 
-	async function postBook() {
+	async function postAuthor() {
 		var book = {
-			name: _name,
-			Author: _author,
-			publishedIn: _publishedIn,
-			lang: _lang
+			name: _name, 
+			country: _country
 		};
-		console.log(bookId);
-		var response = await fetch(url +  '?id=' + bookId, {
-			method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+		var response = await fetch(url +  '?id=' + authorId, {
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -26,41 +22,36 @@
 		var result = await response.json();
 
 		if (result.isSuccess) {
-			window.location.href = '/';
+			window.location.href=variables.frontendAuthorList
 		}		
 		else{
 			alert(result.errorMessage)
 		}
 	}
-	async function fetchBook() {
-		const response = await fetch(url + '/%E2%80%8B' + bookId);
-		console.log(response);
+	async function fetchAuthor() {
+		const response = await fetch(url + '/%E2%80%8B' + authorId);
 		const json = await response.json();
 		console.log(json);
-		_name = json.name;
-		_author = json.author;
-		_publishedIn = json.publishedIn;
-		_lang = json.lang;
-		bookId = json.id;
+		_name = json.name; 
+		_country = json.country;
+		authorId = json.id;
 	}
 
 	onMount(() => {
 		const urlSearchParams = new URLSearchParams(window.location.search);
 		const params = Object.fromEntries(urlSearchParams.entries());
-		bookId = params.bookId;
-		fetchBook();
+		authorId = params.authorId;
+		fetchAuthor();
 	});
 </script>
 
 <h1>Edit Page</h1>
-<a href="/">Back to List</a>
+<a href={variables.frontendAuthorList}>Back to List</a>
 
 <section>
-	<form on:submit|preventDefault={postBook}>
-		<input type="text" bind:value={_name} placeholder="Name" />
-		<input type="text" bind:value={_author} placeholder="Author" />
-		<input type="text" bind:value={_publishedIn} placeholder="PublishedIn" />
-		<input type="text" bind:value={_lang} placeholder="Language" />
+	<form on:submit|preventDefault={postAuthor}>
+		<input type="text" bind:value={_name} placeholder="Name" /> 
+		<input type="text" bind:value={_country} placeholder="Country" />
 		<button type="submit">Save</button>
 	</form>
 </section>

@@ -1,10 +1,9 @@
-﻿namespace LibraryInventory.Api.Models
+﻿namespace LibraryInventory.Api.Models.DTO
 {
-    public class Book
+    public class UpdateBookDTO
     {
-        public int Id { get; set; }
+        public int BookId { get; set; }
         public string Name { get; set; }
-        public string Author { get; set; }
         public string PublishedIn { get; set; }
         public string Lang { get; set; }
     }
