@@ -2,6 +2,8 @@
 
 I aimed in this project to show how a simple web front-end application can connect to simple .net web api back-end application.
 
+I tried to explain in a [playlist](https://youtube.com/playlist?list=PLVm5QU6Z1SsLWABiOs7y2t3Fxv3BdIBEA)
+
 ## Installation
 
  - Clone this repository to local 
